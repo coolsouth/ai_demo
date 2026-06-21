@@ -1,0 +1,13 @@
+# API配置
+BASE_URL=https://api.deepseek.com
+TIMEOUT=30
+MAX_RETRIES=3
+
+# API认证（如果有的话）
+API_KEY=your_api_key_here
+API_SECRET=your_api_secret_here
+
+DEEPSEEK_API_KEY=sk-*****
+
+# 环境类型: development / production
+ENV=development
