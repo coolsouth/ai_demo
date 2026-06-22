@@ -1,0 +1,110 @@
+{
+  "timestamp": "2026-06-22T23:52:58.839906",
+  "report": {
+    "codeReviewReport": {
+      "fileName": "temp_test_code.js",
+      "framework": "JavaScript",
+      "issues": [
+        {
+          "type": "代码质量",
+          "severity": "高",
+          "line": 2,
+          "description": "函数名 'processUserData' 不够具体，建议改为 'processUserDataForDisplay' 或类似名称以明确用途。",
+          "recommendation": "重命名函数以反映其具体功能，例如 'markAndExtractNames'。"
+        },
+        {
+          "type": "代码质量",
+          "severity": "高",
+          "line": 3,
+          "description": "缺少对输入参数 'data' 的类型检查，如果传入非数组或 null/undefined，会导致运行时错误。",
+          "recommendation": "添加类型检查，例如：if (!Array.isArray(data)) { throw new Error('data must be an array'); }"
+        },
+        {
+          "type": "代码质量",
+          "severity": "中",
+          "line": 5,
+          "description": "直接修改原始数据对象 (data[i].processed = true)，这会产生副作用，可能导致调用方数据被意外更改。",
+          "recommendation": "考虑创建数据的深拷贝或浅拷贝，避免修改原始对象。例如：const item = { ...data[i], processed: true };"
+        },
+        {
+          "type": "代码质量",
+          "severity": "中",
+          "line": 7,
+          "description": "使用了 'var' 声明变量 'temp'，在现代 JavaScript 中应优先使用 'let' 或 'const' 以避免作用域问题。",
+          "recommendation": "将 'var temp' 改为 'const temp'，因为 'temp' 的值不会被重新赋值。"
+        },
+        {
+          "type": "代码质量",
+          "severity": "高",
+          "line": 10,
+          "description": "函数 'processUserData' 没有返回值，但看起来应该返回 'result' 数组。",
+          "recommendation": "在函数末尾添加 'return result;'。"
+        },
+        {
+          "type": "安全性",
+          "severity": "严重",
+          "line": 15,
+          "description": "存在 XSS 漏洞：直接将用户输入通过 innerHTML 插入到 DOM 中，攻击者可以注入恶意脚本。",
+          "recommendation": "使用 textContent 代替 innerHTML，或对输入进行 HTML 转义。例如：document.getElementById('output').textContent = input;"
+        },
+        {
+          "type": "安全性",
+          "severity": "中",
+          "line": 14,
+          "description": "未对用户输入进行任何验证或清理，即使使用 textContent，也可能存在其他安全问题（如存储型 XSS 如果数据被保存）。",
+          "recommendation": "考虑对输入进行长度限制、正则过滤或使用 DOMPurify 等库进行清理。"
+        },
+        {
+          "type": "性能",
+          "severity": "高",
+          "line": 20,
+          "description": "在循环中重复创建大型数组 (new Array(1000))，导致大量内存分配和垃圾回收，严重影响性能。",
+          "recommendation": "将数组创建移到循环外部，并复用数组，或使用更高效的数据结构。例如：const arr = new Array(1000); for (let i = 0; i < 1000000; i++) { for (let j = 0; j < 1000; j++) { arr[j] = i + j; } }"
+        },
+        {
+          "type": "性能",
+          "severity": "中",
+          "line": 22,
+          "description": "内层循环每次迭代都访问 arr.length，虽然现代引擎会优化，但最好缓存长度变量。",
+          "recommendation": "将 arr.length 缓存到变量中，例如：const len = arr.length; for (let j = 0; j < len; j++)"
+        },
+        {
+          "type": "可维护性",
+          "severity": "低",
+          "line": 1,
+          "description": "缺少函数注释，尤其是 'processUserData' 和 'badLoop' 函数，没有说明参数、返回值和功能。",
+          "recommendation": "为每个函数添加 JSDoc 注释，描述其用途、参数类型和返回值。"
+        },
+        {
+          "type": "可维护性",
+          "severity": "中",
+          "line": 19,
+          "description": "函数名 'badLoop' 不够描述性，且没有注释说明其意图（可能是测试代码），不利于理解。",
+          "recommendation": "重命名为更具描述性的名称，如 'inefficientArrayAllocationLoop'，并添加注释说明其问题。"
+        },
+        {
+          "type": "框架特定",
+          "severity": "中",
+          "line": 2,
+          "description": "函数 'processUserData' 使用了 for 循环，但现代 JavaScript 推荐使用数组方法如 map、filter 等，以提高可读性和减少副作用。",
+          "recommendation": "考虑使用 Array.prototype.map 来创建新数组，例如：return data.map(item => { const newItem = { ...item, processed: true }; return newItem.name; });"
+        },
+        {
+          "type": "框架特定",
+          "severity": "低",
+          "line": 14,
+          "description": "使用了 document.getElementById，但现代框架（如 React、Vue）通常不直接操作 DOM，建议使用框架的数据绑定方式。",
+          "recommendation": "如果使用框架，请遵循框架的实践；如果是纯 JavaScript，则无问题。"
+        }
+      ],
+      "summary": {
+        "totalIssues": 13,
+        "critical": 1,
+        "high": 4,
+        "medium": 6,
+        "low": 2,
+        "overallAssessment": "代码存在严重的安全漏洞（XSS）和性能瓶颈，同时有多个代码质量和可维护性问题。建议优先修复 XSS 漏洞和性能问题，然后重构代码以提高可读性和健壮性。"
+      }
+    }
+  }
+}
