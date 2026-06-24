@@ -44,6 +44,11 @@ pip install -r requirements.txt
 ```bash
 python -m scripts.chat_cli
 ```
+5. web端运行对话程序
+```bash
+streamlit run app.py
+```
+
 
 ## 📦 核心模块说明
 模块	功能描述
